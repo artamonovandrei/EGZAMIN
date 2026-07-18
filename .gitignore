@@ -1,0 +1,5 @@
+node-js/node_modules/
+node-js/infra/.terraform/
+node-js/infra/*.tfstate
+node-js/infra/*.tfstate.*
+*.pem

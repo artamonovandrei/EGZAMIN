@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dino-dash
+  labels: { app: dino-dash }
+spec:
+  replicas: 3
+  selector: { matchLabels: { app: dino-dash } }
+  template:
+    metadata: { labels: { app: dino-dash } }
+    spec:
+      containers:
+        - name: dino-dash
+          image: IMAGE_PLACEHOLDER
+          ports: [{ containerPort: 3000 }]
+          resources:
+            requests: { cpu: 20m, memory: 32Mi }
+            limits: { cpu: 100m, memory: 96Mi }
+          readinessProbe: { httpGet: { path: /, port: 3000 }, initialDelaySeconds: 3 }
+          livenessProbe: { httpGet: { path: /, port: 3000 }, initialDelaySeconds: 10 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: dino-dash }
+spec:
+  type: NodePort
+  selector: { app: dino-dash }
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 30080

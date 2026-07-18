@@ -1,0 +1,42 @@
+name: Deploy to AWS
+on:
+  workflow_dispatch:
+    inputs:
+      destroy:
+        description: Destroy all AWS resources instead of deploying
+        required: true
+        default: false
+        type: boolean
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+      TF_STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
+      IMAGE: ghcr.io/${{ github.repository_owner }}/dino-dash:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform apply or destroy
+        working-directory: node-js/infra
+        run: |
+          terraform init -backend-config="bucket=${TF_STATE_BUCKET}" -backend-config="key=dino-dash/terraform.tfstate" -backend-config="region=${AWS_REGION}" -backend-config="encrypt=true"
+          terraform ${{ inputs.destroy && 'destroy' || 'apply' }} -auto-approve -var="key_name=${{ vars.EC2_KEY_PAIR_NAME }}" -var="ssh_cidr=${{ vars.SSH_CIDR }}"
+      - name: Deploy Kubernetes manifest
+        if: ${{ !inputs.destroy }}
+        working-directory: node-js/infra
+        run: |
+          MASTER_IP=$(terraform output -raw master_public_ip)
+          printf '%s' '${{ secrets.EC2_SSH_PRIVATE_KEY }}' > /tmp/k3s.pem
+          chmod 600 /tmp/k3s.pem
+          for attempt in {1..30}; do ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 -i /tmp/k3s.pem ec2-user@${MASTER_IP} 'sudo k3s kubectl get nodes' && break || sleep 10; done
+          sed "s|IMAGE_PLACEHOLDER|${IMAGE}|" ../k8s/dino-dash.yaml | ssh -o StrictHostKeyChecking=no -i /tmp/k3s.pem ec2-user@${MASTER_IP} 'sudo k3s kubectl apply -f -'
+          echo "Game URL: $(terraform output -raw game_url)"
