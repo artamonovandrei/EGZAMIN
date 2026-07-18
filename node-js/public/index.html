@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dino Dash</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <header>
+      <div class="brand"><span class="brand-dot"></span> DINO DASH</div>
+      <div class="best">РЕКОРД <strong id="high-score">00000</strong></div>
+    </header>
+    <section class="game-card" aria-label="Игра Dino Dash">
+      <div class="hud"><span>СЧЁТ <strong id="score">00000</strong></span><button id="sound" title="Включить или выключить звук">♫</button></div>
+      <canvas id="game" width="900" height="390" aria-label="Игровое поле"></canvas>
+      <div class="overlay" id="overlay">
+        <div class="egg">●</div>
+        <h1>DINO DASH</h1>
+        <p id="message">Прыгай через кактусы и бей свой рекорд!</p>
+        <button id="start">НАЧАТЬ ИГРУ</button>
+        <small>ПРОБЕЛ / ↑ / КЛИК — прыжок &nbsp; • &nbsp; ↓ — пригнуться</small>
+      </div>
+    </section>
+    <footer>ДИНОЗАВР НЕ СПЕШИТ ВЫМЕРЕТЬ</footer>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@700;800;900&display=swap');
+
+:root { --ink:#24313b; --cream:#fff9e9; --green:#79c36a; --orange:#ffae42; --red:#ee675e; }
+* { box-sizing:border-box; }
+body { margin:0; min-height:100vh; display:grid; place-items:center; color:var(--ink); background:radial-gradient(circle at 20% 15%, #fff8cf 0 5%, transparent 25%), #f7e7b7; font-family:Nunito, sans-serif; }
+.game-shell { width:min(100%, 1000px); padding:24px; }
+header { display:flex; justify-content:space-between; align-items:center; margin:0 8px 14px; font-family:'Press Start 2P', monospace; font-size:12px; }
+.brand { letter-spacing:1px; display:flex; align-items:center; gap:10px; }.brand-dot { width:13px; height:13px; background:var(--red); border-radius:50%; box-shadow:3px 3px 0 #c34e4c; }.best { color:#77818a; font-size:9px; }.best strong { color:var(--ink); }
+.game-card { position:relative; overflow:hidden; border:5px solid var(--ink); border-radius:18px; background:var(--cream); box-shadow:0 9px 0 #c9b785, 0 18px 35px #7c684550; }
+canvas { display:block; width:100%; height:auto; image-rendering:pixelated; }
+.hud { position:absolute; z-index:2; top:18px; right:22px; display:flex; align-items:center; gap:18px; font-family:'Press Start 2P', monospace; font-size:10px; }.hud strong { font-size:13px; }.hud button { border:0; background:transparent; color:var(--ink); font-size:20px; cursor:pointer; }
+.overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:#fff9e9e6; transition:.2s; }.overlay.hidden { opacity:0; pointer-events:none; }.egg { font-size:42px; color:var(--orange); text-shadow:4px 4px 0 #d98830; line-height:1; }.overlay h1 { margin:10px 0 3px; font-family:'Press Start 2P', monospace; font-size:26px; }.overlay p { margin:12px; font-size:18px; }.overlay button { padding:14px 18px; border:3px solid var(--ink); border-radius:8px; color:var(--ink); background:var(--orange); box-shadow:4px 4px 0 var(--ink); font:800 15px Nunito, sans-serif; cursor:pointer; }.overlay button:active { transform:translate(3px,3px); box-shadow:1px 1px 0 var(--ink); }.overlay small { margin-top:22px; font:9px 'Press Start 2P', monospace; color:#77818a; }
+footer { text-align:center; margin-top:25px; color:#8c7a5b; font:9px 'Press Start 2P', monospace; }
+@media (max-width:600px) { .game-shell { padding:12px; } header { font-size:10px; } .best { font-size:7px; } .overlay h1 { font-size:20px; }.overlay p { font-size:15px; }.overlay small { font-size:7px; }.hud { top:12px; right:14px; font-size:7px; }.hud strong { font-size:9px; } }
