@@ -16,6 +16,6 @@ variable "ssh_cidr" {
 }
 variable "instance_type" {
   type        = string
-  default     = "t4g.nano"
+  default     = "t4g.micro"
   description = "Lowest-cost ARM instance suitable for this demonstration cluster."
 }
